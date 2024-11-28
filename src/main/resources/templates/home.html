@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Título por Defecto</title>
+    <meta name="description" th:content="${description}" />
+    <link rel="stylesheet" th:href="@{/css/styles.css(v=${version})}" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body id="landingPage">
+    <div th:replace="~{fragments/header}"></div> 
+    <main class="content">
+    </main>
+    <div th:replace="~{fragments/footer}"></div>
+</body>
+</html>

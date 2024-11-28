@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Gestión de Clientes</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css(v=${version})}" />
+    <script th:src="@{/js/mi_perfil.js(v=${version})}" defer></script>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header}"></div>
+    <!-- Contenido principal -->
+    <main class="content">
+        <h1 th:text="${title}">Editar perfil</h1>
+        <p th:text="${description}">Actualizar tu información</p>
+        <form id="clienteForm" method="put">
+            <input type="hidden" id="diUsuarioId" name="id" th:value="${usuario.id}"/>
+            <label>Nombre: <input type="text" id="diNombre" name="nombre" required th:value="${usuario.nombre}"/></label><br>
+            <label>Apellidos: <input type="text" id="diApellidos" name="apellidos" required th:value="${usuario.apellidos}"/></label><br>
+            <label>Email: <input type="email" id="diEmail" name="email" required th:value="${usuario.email}"/></label><br>
+            <label>Teléfono: <input type="text" id="diTelefono" name="telefono" required th:value="${usuario.telefono}"/></label><br>
+            <label>Dirección: <input type="text" id="diDireccion" name="direccion" required th:value="${usuario.direccion}"/></label><br>
+            <label>Contraseña: <input type="password" id="diPassword" name="password" placeholder="Nueva contraseña (opcional)"/></label><br>
+            <label>Confirmar contraseña: <input type="password" id="diConfirmPassword" name="confirmPassword" placeholder="Confirmar nueva contraseña"/></label><br>
+            <button type="submit">Actualizar mi perfil</button>
+        </form>
+    </main>    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer}"></div>
+</body>
+</html>

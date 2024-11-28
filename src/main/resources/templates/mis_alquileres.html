@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Título por Defecto</title>
+    <meta name="description" th:content="${description}" />
+    <link rel="stylesheet" th:href="@{/css/styles.css(v=${version})}" />
+    <script th:src="@{/js/mis_alquileres.js(v=${version})}" defer></script>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div th:replace="~{fragments/header}"></div>
+    <main id="mis_alquileres" class="content">
+        <h1 th:text="${title}"></h1>
+        <p th:text="${description}"></p>
+        <button class="createButton">Crear nuevo alquiler</button>
+        <p>La edición de estos alquileres debe hacerla un administrador.</p>
+        <table id="tablaAlquileres">
+            <thead>
+                <tr>
+                    <th>Numero Alquiler</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de fin</th>
+                    <th>Vehiculo alquilado</th>
+                    <th>Precio total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="alquiler: ${alquileres}">
+                    <td th:data-id="${alquiler.id}" th:text="${alquiler.id}"></td>
+                    <td th:data-fechainicio="${alquiler.fechaInicio}" th:text="${alquiler.fechaInicio}"></td>
+                    <td th:data-fechafin="${alquiler.fechaFin}" th:text="${alquiler.fechaFin}"></td>
+                    <td th:text="${alquiler.vehiculoInfo}"></td>
+                    <td th:data-precio="${alquiler.precio}" th:text="${alquiler.precio}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <dialog id="crearAlquilerDialog">
+        <form id="formCrearAlquiler">
+            <h2>Crear nuevo alquiler</h2>
+            <input type="number" id="clienteId" name="clienteId" hidden th:value="${usuarioID}" required>
+            <div class="grid">
+                <div class="input-group">
+                    <label for="vehiculoId">Vehículo:</label>
+                    <select id="vehiculoId" name="vehiculoId" required>
+                        <option value="" disabled selected>Seleccione un vehículo</option>
+                        <th:block th:each="vehiculo : ${vehiculos}">
+                            <option th:value="${vehiculo.id}" th:data-price="${vehiculo.precio_dia}"
+                                th:text="${vehiculo.id} + ' - ' + ${vehiculo.marca} + ' (' + ${vehiculo.matricula} + ')'">
+                        </th:block>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="fechaInicio">Fecha de Inicio:</label>
+                    <input type="date" id="fechaInicio" name="fechaInicio" required>
+                </div>
+                <div class="input-group">
+                    <p class="text">Precio / Dia:</p>
+                    <p id="precio">0€</p>
+                </div>
+                <div class="input-group">
+                    <label for="fechaFin">Fecha de Fin:</label>
+                    <input type="date" id="fechaFin" name="fechaFin" required>
+                </div>
+            </div>
+            <p id="errorFechas" style="color: red; display: none;">La fecha de inicio debe ser menor o igual que la
+                fecha de fin.</p>
+            <p><b>Precio total:</b></p>
+            <p id="precioTotal"></p>
+            <div class="inline_buttons">
+                <button type="submit">Crear</button>
+                <button type="button" class="closeButtonModal">Cerrar</button>
+            </div>
+        </form>
+    </dialog>
+    <div th:replace="~{fragments/footer}"></div>
+</body>
+
+</html>
