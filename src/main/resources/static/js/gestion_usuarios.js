@@ -58,7 +58,7 @@ document.getElementById('PutdialogUsuario').addEventListener('submit', function(
         password: PutdiPassword ? PutdiConfirmPassword : null
     };
 
-    fetch('/api/usuarios/update-client', {
+    fetch('/api/usuarios/private/update-client', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ document.querySelectorAll('.deleteButton').forEach(button => {
 
 function eliminarUsuario(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-        fetch(`/api/usuarios/eliminar/${id}`, {
+        fetch(`/api/usuarios/private/eliminar/${id}`, {
             method: 'DELETE',
         })
         .then(() => {
@@ -141,7 +141,7 @@ function registrarUsuario() {
         document.getElementById('error-message').textContent = 'Las contraseñas no coinciden.';
         return;
     }
-    fetch('/api/usuarios/save-client', {
+    fetch('/api/usuarios/public/save-client', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -21,7 +21,7 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
         direccion: direccion,
         password: nuevaContrasena ? nuevaContrasena : null 
     };
-    fetch('/api/usuarios/update-client', {
+    fetch('/api/usuarios/private/update-client', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

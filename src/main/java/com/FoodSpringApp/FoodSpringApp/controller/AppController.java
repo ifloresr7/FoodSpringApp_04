@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -31,7 +29,7 @@ public class AppController {
     @Autowired
     private AlquilerService alquilerService;
 
-    private String version = "2024.11.24.21.35";
+    private String version = "2024.11.29.21.35";
 
     @GetMapping("/")
     public String homePage(Model model) {

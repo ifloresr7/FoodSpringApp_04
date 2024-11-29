@@ -20,30 +20,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            )
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/", "/vehiculos", "/login", "/logout", "/registro", "/css/**", "/js/**", "/images/**", "/webjars/**", "/api/**").permitAll()
-                .requestMatchers("/mis-alquileres", "/mi-perfil").authenticated()
-                .requestMatchers("/gestion-vehiculos","/gestion-usuarios","/gestion-alquileres").hasRole("ADMIN")
-            )
-            .formLogin((form) -> form
-                .loginPage("/login")
-                .usernameParameter("dni")
-                .passwordParameter("password")
-                .permitAll()
-                .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/", true)
-            )
-            .logout((logout) -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .permitAll()
-            );
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(
+                                "/",
+                                "/vehiculos",
+                                "/login",
+                                "/logout",
+                                "/registro",
+                                "/css/**", "/js/**", "/images/**",
+                                "/api/usuarios/public**", "/api/alquileres/public**", "/api/vehiculos/public**")
+                        .permitAll()
+                        .requestMatchers("/mis-alquileres", "/mi-perfil",
+                                "/api/usuarios/private**",
+                                "/api/alquileres/private**",
+                                "/api/vehiculos/private**")
+                        .authenticated()
+                        .requestMatchers("/gestion-vehiculos", "/gestion-usuarios", "/gestion-alquileres")
+                        .hasRole("ADMIN"))
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .usernameParameter("dni")
+                        .passwordParameter("password")
+                        .permitAll()
+                        .failureUrl("/login?error=true")
+                        .defaultSuccessUrl("/", true))
+                .logout((logout) -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .permitAll());
         return http.build();
     }
 }

@@ -33,19 +33,13 @@ public class AlquilerController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping
-    public ResponseEntity<List<Alquiler>> obtenerTodosAlquileres() {
-    List<Alquiler> alquileres = alquilerService.obtenerTodosAlquileres();
-    return ResponseEntity.ok(alquileres);
-    }
-
-    @GetMapping("/friendly")
+    @GetMapping("/public/obtener-alquileres")
     public ResponseEntity<List<Alquiler>> obtenerTodosAlquileress() {
         List<Alquiler> alquileres = alquilerService.obtenerTodosAlquileres();
         return ResponseEntity.ok(alquileres);
     }
 
-    @PostMapping("/crear-alquiler")
+    @PostMapping("/private/crear-alquiler")
     public ResponseEntity<?> crearAlquiler(@RequestBody Alquiler alquilerData) {
         try {
             // Validar campos obligatorios
@@ -70,8 +64,7 @@ public class AlquilerController {
         }
     }
 
-       
-    @GetMapping("/mis-alquileres")
+    @GetMapping("/private/mis-alquileres")
     public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario() {
         // Obtener el usuario autenticado
         String dni = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -87,7 +80,7 @@ public class AlquilerController {
         return ResponseEntity.ok(alquileres);
     }
     
-    @PutMapping("/actualizar-alquiler")
+    @PutMapping("/private/actualizar-alquiler")
     public ResponseEntity<?> actualizarAlquiler(@RequestBody Alquiler alquilerData) {
         try {
             Alquiler actualizado = alquilerService.update(alquilerData);
@@ -98,7 +91,7 @@ public class AlquilerController {
         }
     }
 
-    @DeleteMapping("/eliminar-alquiler/{id}")
+    @DeleteMapping("/private/eliminar-alquiler/{id}")
     public ResponseEntity<?> eliminarAlquiler(@PathVariable int id) {
         try {
             alquilerService.eliminar(id);
@@ -108,6 +101,4 @@ public class AlquilerController {
                                 .body("Error al eliminar el alquiler: " + e.getMessage());
         }
     }
-
-
 }

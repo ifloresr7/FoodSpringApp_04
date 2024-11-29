@@ -49,7 +49,7 @@ document.getElementById('PutdialogVehiculo').addEventListener('submit', function
         precio_dia: PutdiPrecio_dia  
     };
 
-    fetch('/api/vehiculos/update-vehiculo', {
+    fetch('/api/vehiculos/private/update-vehiculo', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ document.querySelectorAll('.deleteButton').forEach(button => {
 
 function eliminarVehiculo(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este vehiculo?')) {
-        fetch(`/api/vehiculos/eliminar/${id}`, {
+        fetch(`/api/vehiculos/private/eliminar/${id}`, {
             method: 'DELETE',
         })
         .then(() => {
@@ -128,7 +128,7 @@ function registrarVehiculo() {
         precio_dia: document.getElementById('Postprecio_dia').value,
     };
     
-    fetch('/api/vehiculos/save-vehiculo', {
+    fetch('/api/vehiculos/private/save-vehiculo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

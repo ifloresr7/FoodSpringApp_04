@@ -1,7 +1,6 @@
 package com.FoodSpringApp.FoodSpringApp.controller;
 
 import java.util.HashMap;
-//import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,14 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-
 import com.FoodSpringApp.FoodSpringApp.model.Usuario;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
 
@@ -30,7 +26,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping("/save-client")
+    @PostMapping("/public/save-client")
     public ResponseEntity<Map<String, String>> guardarCliente(@RequestBody Usuario usuario) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -48,7 +44,7 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping("/update-client")
+    @PutMapping("/private/update-client")
     public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuarioData) {
         Usuario usuarioActualizado = usuarioService.update(usuarioData.getId(), usuarioData);
         System.out.println(usuarioActualizado);
@@ -59,8 +55,8 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable int id) {
+    @DeleteMapping("/private/eliminar/{id}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable int id, @RequestBody String token) {
         if (usuarioService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
