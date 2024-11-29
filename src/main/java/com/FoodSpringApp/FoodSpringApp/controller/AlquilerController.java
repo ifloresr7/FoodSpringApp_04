@@ -1,6 +1,8 @@
 package com.FoodSpringApp.FoodSpringApp.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,10 +36,19 @@ public class AlquilerController {
     private UsuarioService usuarioService;
 
     @GetMapping("/public/obtener-alquileres")
-    public ResponseEntity<List<Alquiler>> obtenerTodosAlquileress() {
-        List<Alquiler> alquileres = alquilerService.obtenerTodosAlquileres();
-        return ResponseEntity.ok(alquileres);
+    public ResponseEntity<?> obtenerTodosAlquileress() {
+        try {
+            List<Alquiler> alquileres = alquilerService.obtenerTodosAlquileres();
+            return ResponseEntity.ok(alquileres);
+        } catch (Exception e) {
+            System.err.println("Error al obtener los alquileres: " + e.getMessage());
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error al obtener la lista de alquileres. Por favor, intente más tarde.");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(500).body(errorResponse);
+        }
     }
+
 
     @PostMapping("/private/crear-alquiler")
     public ResponseEntity<?> crearAlquiler(@RequestBody Alquiler alquilerData) {

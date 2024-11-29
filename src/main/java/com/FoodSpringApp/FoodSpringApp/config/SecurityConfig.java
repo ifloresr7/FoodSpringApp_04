@@ -31,14 +31,23 @@ public class SecurityConfig {
                                 "/logout",
                                 "/registro",
                                 "/css/**", "/js/**", "/images/**",
-                                "/api/usuarios/public**", "/api/alquileres/public**", "/api/vehiculos/public**")
+                                "/api/usuarios/public/**",
+                                "/api/alquileres/public/**",
+                                "/api/vehiculos/public/**",
+                                "/api/usuarios/private/**",
+                                "/api/alquileres/private/**",
+                                "/api/vehiculos/private/**"                                
+                                )
                         .permitAll()
-                        .requestMatchers("/mis-alquileres", "/mi-perfil",
-                                "/api/usuarios/private**",
-                                "/api/alquileres/private**",
-                                "/api/vehiculos/private**")
+                        .requestMatchers(
+                                "/mis-alquileres",
+                                "/mi-perfil"
+                                )
                         .authenticated()
-                        .requestMatchers("/gestion-vehiculos", "/gestion-usuarios", "/gestion-alquileres")
+                        .requestMatchers(
+                                "/gestion-vehiculos",
+                                "/gestion-usuarios",
+                                "/gestion-alquileres")
                         .hasRole("ADMIN"))
                 .formLogin((form) -> form
                         .loginPage("/login")

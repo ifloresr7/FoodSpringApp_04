@@ -56,11 +56,14 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/private/eliminar/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable int id, @RequestBody String token) {
+    public ResponseEntity<Map<String, String>> eliminarUsuario(@PathVariable int id) {
+        Map<String, String> response = new HashMap<>();
         if (usuarioService.findById(id) == null) {
-            return ResponseEntity.notFound().build();
+            response.put("message", "Usuario no encontrado.");
+            return ResponseEntity.status(404).body(response);
         }
         usuarioService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        response.put("message", "Usuario eliminado exitosamente.");
+        return ResponseEntity.status(204).body(response);
     }
 }
