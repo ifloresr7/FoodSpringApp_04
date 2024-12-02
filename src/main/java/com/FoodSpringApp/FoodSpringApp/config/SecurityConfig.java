@@ -33,15 +33,16 @@ public class SecurityConfig {
                                 "/css/**", "/js/**", "/images/**",
                                 "/api/usuarios/public/**",
                                 "/api/alquileres/public/**",
-                                "/api/vehiculos/public/**",
-                                "/api/usuarios/private/**",
-                                "/api/alquileres/private/**",
-                                "/api/vehiculos/private/**"                                
+                                "/api/vehiculos/public/**"
+                              
                                 )
                         .permitAll()
                         .requestMatchers(
                                 "/mis-alquileres",
-                                "/mi-perfil"
+                                "/mi-perfil",
+                                "/api/usuarios/private/**",
+                                "/api/alquileres/private/**",
+                                "/api/vehiculos/private/**" 
                                 )
                         .authenticated()
                         .requestMatchers(
