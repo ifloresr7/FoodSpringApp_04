@@ -18,6 +18,7 @@ import com.FoodSpringApp.FoodSpringApp.model.Vehiculo;
 import com.FoodSpringApp.FoodSpringApp.service.AlquilerService;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
 import com.FoodSpringApp.FoodSpringApp.service.VehiculoService;
+import com.FoodSpringApp.FoodSpringApp.config.SessionManager;
 
 @Controller
 public class AppController {
@@ -40,7 +41,12 @@ public class AppController {
         model.addAttribute("role", obtenerRoleDeUsuario());
         return "home";
     }
-    
+
+    @GetMapping("/activeSessions")
+    public Map<String, String> getActiveSessions() {
+        return SessionManager.getAllSessions();
+    }
+
     @GetMapping("/vehiculos")
     public String vehiculosPage(Model model) {
         model.addAttribute("version", this.version);

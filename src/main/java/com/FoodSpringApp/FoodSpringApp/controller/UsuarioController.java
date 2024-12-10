@@ -49,8 +49,10 @@ public class UsuarioController {
             Map<String, Object> tokenDataMap = (Map<String, Object>) data.get("tokenData");
             String token = (String) tokenDataMap.get("token");
             if(!CustomAuthSuccessHandler.isSessionIdValid(token)){
-                return ResponseEntity.notFound().build();
+                System.out.println("TOKEN NO VALIDO");
+                return ResponseEntity.status(401).build();
             }
+            System.out.println("TOKEN VALIDO");
             Map<String, Object> usuarioDataMap = (Map<String, Object>) data.get("usuarioData");
             Usuario usuario = new Usuario();
             usuario.setId(Integer.parseInt((String) usuarioDataMap.get("id")));
