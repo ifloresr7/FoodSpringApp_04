@@ -1,5 +1,6 @@
 document.getElementById('clienteForm').addEventListener('submit', function(event) {
     event.preventDefault();
+
     const usuarioId = document.getElementById('diUsuarioId').value;
     const nombre = document.getElementById('diNombre').value;
     const apellidos = document.getElementById('diApellidos').value;
@@ -8,10 +9,22 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
     const direccion = document.getElementById('diDireccion').value;
     const nuevaContrasena = document.getElementById('diPassword').value;
     const confirmarContrasena = document.getElementById('diConfirmPassword').value;
+
     if (nuevaContrasena && nuevaContrasena !== confirmarContrasena) {
         alert('Las contraseñas no coinciden. Por favor, intentalo nuevamente.');
         return;
     }
+
+    const token_custom_foodspringapp = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token_custom_foodspringapp='))
+        ?.split('=')[1];
+
+    if (!token_custom_foodspringapp) {
+        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
+        return;
+    }
+
     const usuarioData = {
         id: usuarioId,
         nombre: nombre,
@@ -19,31 +32,34 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
         email: email,
         telefono: telefono,
         direccion: direccion,
-        password: nuevaContrasena ? nuevaContrasena : null 
+        password: nuevaContrasena ? nuevaContrasena : null
     };
+    
+    const tokenData = {
+        token: token_custom_foodspringapp
+    };
+    
     fetch('/api/usuarios/private/update-client', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify(usuarioData)
+        body: JSON.stringify({ usuarioData, tokenData })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al actualizar el perfil');
+            return response.json().then(errorData => {
+                alert(`Error: ${errorData.message || 'Error desconocido'}`);
+                throw new Error(errorData.message || 'Error desconocido');
+            });
         }
         return response.json();
     })
     .then(data => {
-        if (data) {
-            alert('Perfil actualizado con éxito.');
-        } else {
-            alert('No se pudo actualizar el perfil.');
-        }
+        alert(data.message || 'Perfil actualizado con éxito.');
     })
     .catch(error => {
         console.error('Error al actualizar el perfil:', error);
-        alert('Hubo un problema al intentar actualizar el perfil.');
     });
 });
