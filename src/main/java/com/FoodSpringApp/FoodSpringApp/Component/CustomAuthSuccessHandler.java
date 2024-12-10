@@ -36,9 +36,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
         try {
             String sessionId = decrypt(token);
             return true;
-        
-
-            
+    
         } catch (Exception e) {
             System.err.println("Error al descifrar el token: " + e.getMessage());
             return false;
