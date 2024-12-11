@@ -59,8 +59,8 @@ formCrearAlquiler.addEventListener("submit", async (event) => {
     };
 
     const url = alquilerId 
-        ? '/api/alquileres/private/actualizar-alquiler' // Usar PUT si existe un ID
-        : '/api/alquileres/private/crear-alquiler';    // Usar POST si es nuevo
+        ? '/api/alquileres/actualizar-alquiler' // Usar PUT si existe un ID
+        : '/api/alquileres/crear-alquiler';    // Usar POST si es nuevo
 
     const method = alquilerId ? 'PUT' : 'POST'; // Método HTTP dinámico
 
@@ -147,18 +147,18 @@ function calculateUpdatedPrice(fechaInicio, fechaFin, price) {
 document.querySelectorAll('.deleteButton').forEach(button => {
     button.addEventListener('click', async function () {
         const row = this.closest('tr');
-        const alquilerId = row.getAttribute('data-id'); // Captura el ID del alquiler de la fila
+        const alquilerId = row.getAttribute('data-id');
 
         if (confirm(`¿Estás seguro de que deseas eliminar el alquiler con ID ${alquilerId}?`)) {
             try {
-                const response = await fetch(`/api/alquileres/public/eliminar-alquiler/${alquilerId}`, {
+                const response = await fetch(`/api/alquileres/eliminar-alquiler/${alquilerId}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                 });
 
                 if (response.ok) {
                     alert("Alquiler eliminado exitosamente.");
-                    row.remove(); // Eliminar la fila de la tabla
+                    row.remove();
                 } else {
                     alert("Error al eliminar el alquiler.");
                 }

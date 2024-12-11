@@ -24,18 +24,17 @@ import com.FoodSpringApp.FoodSpringApp.model.Usuario;
 import com.FoodSpringApp.FoodSpringApp.service.AlquilerService;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
 
-
 @Controller
 @RequestMapping("/api/alquileres")
 public class AlquilerController {
 
     @Autowired
     private AlquilerService alquilerService;
-    
+
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/public/obtener-alquileres")
+    @GetMapping("/obtener-alquileres")
     public ResponseEntity<?> obtenerTodosAlquileress() {
         try {
             List<Alquiler> alquileres = alquilerService.obtenerTodosAlquileres();
@@ -49,8 +48,7 @@ public class AlquilerController {
         }
     }
 
-
-    @PostMapping("/private/crear-alquiler")
+    @PostMapping("/crear-alquiler")
     public ResponseEntity<?> crearAlquiler(@RequestBody Alquiler alquilerData) {
         try {
             // Validar campos obligatorios
@@ -67,49 +65,49 @@ public class AlquilerController {
                 return ResponseEntity.ok(nuevoAlquiler);
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                    .body("Hubo un problema al guardar el alquiler.");
+                        .body("Hubo un problema al guardar el alquiler.");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error inesperado: " + e.getMessage());
+                    .body("Error inesperado: " + e.getMessage());
         }
     }
 
-    @GetMapping("/private/mis-alquileres")
+    @GetMapping("/mis-alquileres")
     public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario() {
         // Obtener el usuario autenticado
         String dni = SecurityContextHolder.getContext().getAuthentication().getName();
-    
+
         // Obtener información del usuario
         Usuario usuario = usuarioService.obtenerUsuarioPorDni(dni); // Asume que este método está en UsuarioService
         if (usuario == null) {
             return ResponseEntity.badRequest().build();
         }
-    
+
         // Obtener los alquileres asociados al usuario
         List<Alquiler> alquileres = alquilerService.obtenerAlquileresPorCliente(usuario.getId());
         return ResponseEntity.ok(alquileres);
     }
-    
-    @PutMapping("/private/actualizar-alquiler")
+
+    @PutMapping("/actualizar-alquiler")
     public ResponseEntity<?> actualizarAlquiler(@RequestBody Alquiler alquilerData) {
         try {
             Alquiler actualizado = alquilerService.update(alquilerData);
             return ResponseEntity.ok(actualizado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error al actualizar el alquiler: " + e.getMessage());
+                    .body("Error al actualizar el alquiler: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/private/eliminar-alquiler/{id}")
+    @DeleteMapping("/eliminar-alquiler/{id}")
     public ResponseEntity<?> eliminarAlquiler(@PathVariable int id) {
         try {
             alquilerService.eliminar(id);
             return ResponseEntity.ok("Alquiler eliminado exitosamente.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error al eliminar el alquiler: " + e.getMessage());
+                    .body("Error al eliminar el alquiler: " + e.getMessage());
         }
     }
 }

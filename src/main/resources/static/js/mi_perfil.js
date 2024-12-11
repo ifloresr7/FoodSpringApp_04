@@ -15,16 +15,6 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
         return;
     }
 
-    const token_custom_foodspringapp = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('token_custom_foodspringapp='))
-        ?.split('=')[1];
-
-    if (!token_custom_foodspringapp) {
-        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
-        return;
-    }
-
     const usuarioData = {
         id: usuarioId,
         nombre: nombre,
@@ -35,11 +25,18 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
         password: nuevaContrasena ? nuevaContrasena : null
     };
     
+    const token_custom_foodspringapp = document.cookie.split('; ').find(row => row.startsWith('token_custom_foodspringapp=')) ?.split('=')[1];
+
+    if (!token_custom_foodspringapp) {
+        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
+        return;
+    }
+
     const tokenData = {
         token: token_custom_foodspringapp
     };
     
-    fetch('/api/usuarios/private/update-client', {
+    fetch('/api/usuarios/update-client', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -50,16 +47,16 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
     .then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                alert(`Error: ${errorData.message || 'Error desconocido'}`);
-                throw new Error(errorData.message || 'Error desconocido');
+                alert(`${errorData.message}`);
+                throw new Error(errorData.message);
             });
         }
         return response.json();
     })
     .then(data => {
-        alert(data.message || 'Perfil actualizado con éxito.');
+        alert(data.message);
     })
     .catch(error => {
-        console.error('Error al actualizar el perfil:', error);
+        alert('Se a producido un error:', error);
     });
 });

@@ -44,17 +44,14 @@ public class SecurityConfig {
                             "/logout",
                             "/registro",
                             "/css/**", "/js/**", "/images/**",
-                            "/api/usuarios/public/**",
-                            "/api/alquileres/public/**",
-                            "/api/vehiculos/public/**"
+                            "/api/usuarios/**",
+                            "/api/alquileres/**",
+                            "/api/vehiculos/**"
                     )
                     .permitAll()
                     .requestMatchers(
                             "/mis-alquileres",
-                            "/mi-perfil",
-                            "/api/usuarios/private/**",
-                            "/api/alquileres/private/**",
-                            "/api/vehiculos/private/**"
+                            "/mi-perfil"
                     )
                     .authenticated()
                     .requestMatchers(
@@ -76,7 +73,6 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
                     .permitAll());
-        
         return http.build();
     }
 }

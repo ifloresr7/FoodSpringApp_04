@@ -23,7 +23,7 @@ public class VehiculoController {
     @Autowired
     private VehiculoService vehiculoService;
 
-   @PostMapping("/private/save-vehiculo")
+    @PostMapping("/save-vehiculo")
     public ResponseEntity<Map<String, String>> guardarVehiculo(@RequestBody Vehiculo vehiculo) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -36,7 +36,7 @@ public class VehiculoController {
         }
     }
 
-    @PutMapping("/private/update-vehiculo")
+    @PutMapping("/update-vehiculo")
     public ResponseEntity<Vehiculo> actualizarVehiculo(@RequestBody Vehiculo vehiculoData) {
         Vehiculo vehiculoActualizado = vehiculoService.update(vehiculoData.getId(), vehiculoData);
         System.out.println(vehiculoActualizado);
@@ -47,7 +47,7 @@ public class VehiculoController {
         }
     }
 
-    @DeleteMapping("/private/eliminar/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarVehiculo(@PathVariable int id) {
         if (vehiculoService.findById(id) == null) {
             return ResponseEntity.notFound().build();

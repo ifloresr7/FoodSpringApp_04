@@ -20,7 +20,7 @@ formCrearAlquiler.addEventListener("submit", async (event) => {
         precio: document.getElementById("precio").value
     };
     try {
-        const response = await fetch('/api/alquileres/private/crear-alquiler', {
+        const response = await fetch('/api/alquileres/crear-alquiler', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(alquilerData)

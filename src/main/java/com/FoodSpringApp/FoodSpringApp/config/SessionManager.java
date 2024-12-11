@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SessionManager {
-    private static final Map<String, String> activeSessions = 
-        Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, String> activeSessions = Collections.synchronizedMap(new HashMap<>());
 
     public static void addSession(String sessionId) {
         activeSessions.put(sessionId, sessionId);

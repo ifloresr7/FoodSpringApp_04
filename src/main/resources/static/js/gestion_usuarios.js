@@ -1,7 +1,6 @@
 document.querySelectorAll('.editButton').forEach(button => {
     button.addEventListener('click', function () {
         const row = this.closest('tr');
-
         const PutusuarioId = row.querySelector('td[data-id]').getAttribute('data-id');
         const Putnombre = row.querySelector('td[data-nombre]').getAttribute('data-nombre');
         const Putapellidos = row.querySelector('td[data-apellidos]').getAttribute('data-apellidos');
@@ -10,7 +9,6 @@ document.querySelectorAll('.editButton').forEach(button => {
         const Putrole = row.querySelector('td[data-role]').getAttribute('data-role');
         const Puttelefono = row.querySelector('td[data-telefono]').getAttribute('data-telefono');
         const Putdireccion = row.querySelector('td[data-direccion]').getAttribute('data-direccion');
-
         document.getElementById('PutdiUsuarioId').value = PutusuarioId;
         document.getElementById('PutdiNombre').value = Putnombre;
         document.getElementById('PutdiApellidos').value = Putapellidos;
@@ -19,17 +17,14 @@ document.querySelectorAll('.editButton').forEach(button => {
         document.getElementById('PutdiRole').value = Putrole;
         document.getElementById('PutdiTelefono').value = Puttelefono;
         document.getElementById('PutdiDireccion').value = Putdireccion;
-
         document.getElementById('PutdiPassword').value = '';
         document.getElementById('PutdiConfirmPassword').value = '';
-
         document.getElementById('PutdialogUsuario').showModal();
     });
 });
 
-document.getElementById('PutdialogUsuario').addEventListener('submit', function(event) {
+document.getElementById('PutdialogUsuario').addEventListener('submit', function (event) {
     event.preventDefault();
-
     const PutdiUsuarioId = document.getElementById('PutdiUsuarioId').value;
     const PutdiNombre = document.getElementById('PutdiNombre').value;
     const PutdiApellidos = document.getElementById('PutdiApellidos').value;
@@ -40,7 +35,6 @@ document.getElementById('PutdialogUsuario').addEventListener('submit', function(
     const PutdiDireccion = document.getElementById('PutdiDireccion').value;
     const PutdiPassword = document.getElementById('PutdiPassword').value;
     const PutdiConfirmPassword = document.getElementById('PutdiConfirmPassword').value;
-
     if (PutdiPassword && PutdiPassword !== PutdiConfirmPassword) {
         alert('Las contraseñas no coinciden. Por favor, intentalo nuevamente.');
         return;
@@ -58,33 +52,42 @@ document.getElementById('PutdialogUsuario').addEventListener('submit', function(
         password: PutdiPassword ? PutdiConfirmPassword : null
     };
 
-    fetch('/api/usuarios/private/update-client', {
+    const token_custom_foodspringapp = document.cookie.split('; ').find(row => row.startsWith('token_custom_foodspringapp='))?.split('=')[1];
+
+    if (!token_custom_foodspringapp) {
+        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
+        return;
+    }
+
+    const tokenData = {
+        token: token_custom_foodspringapp
+    };
+
+    fetch('/api/usuarios/update-client', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify(usuarioData)
+        body: JSON.stringify({ usuarioData, tokenData })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al actualizar el perfil');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data) {
-            alert('Perfil actualizado con éxito.');
-        } else {
-            alert('No se pudo actualizar el perfil.');
-        }
-    })
-    .catch(error => {
-        console.error('Error al actualizar el perfil:', error);
-        alert('Hubo un problema al intentar actualizar el perfil.');
-    }).finally(() => {
-        window.location.reload();
-    });
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    alert(`${errorData.message}`);
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            alert('Se a producido un error:', error);
+        }).finally(() => {
+            window.location.reload();
+        });
 });
 
 document.querySelectorAll('.closeButtonModal').forEach(button => {
@@ -106,63 +109,101 @@ document.querySelectorAll('.deleteButton').forEach(button => {
 });
 
 function eliminarUsuario(id) {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-        fetch(`/api/usuarios/private/eliminar/${id}`, {
-            method: 'DELETE',
-        })
-        .then(() => {
-            alert('Usuario eliminado correctamente');
-        })
-        .catch(error => console.error('Error al eliminar el usuario:', error))
-        .finally(() => {
-            window.location.reload();
-        });
-    }
-}
+    const token_custom_foodspringapp = document.cookie.split('; ').find(row => row.startsWith('token_custom_foodspringapp='))?.split('=')[1];
 
-document.getElementById('createButton').addEventListener('click', function() {
-    document.getElementById('PostdialogUsuario').showModal();
-});
-
-function registrarUsuario() {
-    const formData = {
-        nombre: document.getElementById('Postnombre').value,
-        apellidos: document.getElementById('Postapellidos').value,
-        dni: document.getElementById('Postdni').value,
-        email: document.getElementById('Postemail').value,
-        role: document.getElementById('Postrole').value,
-        telefono: document.getElementById('Posttelefono').value,
-        direccion: document.getElementById('Postdireccion').value,
-        password: document.getElementById('Postpassword').value,
-        confirmPassword: document.getElementById('PostconfirmPassword').value
-    };
-    if (formData.password !== formData.confirmPassword) {
-        document.getElementById('error-message').style.display = 'block';
-        document.getElementById('error-message').textContent = 'Las contraseñas no coinciden.';
+    if (!token_custom_foodspringapp) {
+        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
         return;
     }
-    fetch('/api/usuarios/public/save-client', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert(data.message);
-        } else {
-            document.getElementById('error-message').style.display = 'block';
-            document.getElementById('error-message').textContent = 'Hubo un error al registrar el usuario.';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('error-message').style.display = 'block';
-        document.getElementById('error-message').textContent = 'Hubo un error al registrar el usuario.';
-    })
-    .finally(() => {
-        window.location.reload();
-    });
+
+    const tokenData = {
+        token: token_custom_foodspringapp
+    };
+    
+    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+        fetch(`/api/usuarios/eliminar/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ tokenData })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        alert(`${errorData.message}`);
+                        throw new Error(errorData.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('Se a producido un error:', error);
+            })
+            .finally(() => {
+                window.location.reload();
+            });
+    }
 }
+    document.getElementById('createButton').addEventListener('click', function () {
+        document.getElementById('PostdialogUsuario').showModal();
+    });
+
+    function registrarUsuario() {
+        const formData = {
+            nombre: document.getElementById('Postnombre').value,
+            apellidos: document.getElementById('Postapellidos').value,
+            dni: document.getElementById('Postdni').value,
+            email: document.getElementById('Postemail').value,
+            role: document.getElementById('Postrole').value,
+            telefono: document.getElementById('Posttelefono').value,
+            direccion: document.getElementById('Postdireccion').value,
+            password: document.getElementById('Postpassword').value,
+            confirmPassword: document.getElementById('PostconfirmPassword').value
+        };
+        if (formData.password !== formData.confirmPassword) {
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('error-message').textContent = 'Las contraseñas no coinciden.';
+            return;
+        }
+
+        const token_custom_foodspringapp = document.cookie.split('; ').find(row => row.startsWith('token_custom_foodspringapp='))?.split('=')[1];
+
+        if (!token_custom_foodspringapp) {
+            alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
+            return;
+        }
+
+        const tokenData = {
+            token: token_custom_foodspringapp
+        };
+
+        fetch('/api/usuarios/create-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ usuarioData, tokenData })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        alert(`${errorData.message}`);
+                        throw new Error(errorData.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('Se a producido un error:', error);
+            })
+            .finally(() => {
+                window.location.reload();
+            });
+    }

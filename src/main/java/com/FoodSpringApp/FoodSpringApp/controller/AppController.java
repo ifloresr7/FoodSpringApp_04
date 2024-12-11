@@ -42,11 +42,6 @@ public class AppController {
         return "home";
     }
 
-    @GetMapping("/activeSessions")
-    public Map<String, String> getActiveSessions() {
-        return SessionManager.getAllSessions();
-    }
-
     @GetMapping("/vehiculos")
     public String vehiculosPage(Model model) {
         model.addAttribute("version", this.version);
