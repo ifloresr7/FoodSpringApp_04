@@ -36,7 +36,7 @@ document.getElementById('clienteForm').addEventListener('submit', function(event
         token: token_custom_foodspringapp
     };
     
-    fetch('/api/usuarios/update-client', {
+    fetch('/api', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

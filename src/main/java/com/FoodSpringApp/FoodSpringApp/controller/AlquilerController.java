@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.FoodSpringApp.FoodSpringApp.Component.CustomAuthSuccessHandler;
 import com.FoodSpringApp.FoodSpringApp.model.Alquiler;
@@ -84,19 +85,25 @@ public class AlquilerController {
         }
     }
 
-    @GetMapping("/mis-alquileres")
-    public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario() {
-        // Obtener el usuario autenticado
-        String dni = SecurityContextHolder.getContext().getAuthentication().getName();
-        // Obtener información del usuario
-        Usuario usuario = usuarioService.obtenerUsuarioPorDni(dni); // Asume que este método está en UsuarioService
-        if (usuario == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        // Obtener los alquileres asociados al usuario
-        List<Alquiler> alquileres = alquilerService.obtenerAlquileresPorCliente(usuario.getId());
-        return ResponseEntity.ok(alquileres);
+@GetMapping("/mis-alquileres")
+public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario(@RequestParam(value = "dni", required = false) String dni) {
+    
+    // Si no se proporciona un DNI, obtener el usuario autenticado
+    if (dni == null || dni.isEmpty()) {
+        dni = SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
+    // Obtener información del usuario
+    Usuario usuario = usuarioService.obtenerUsuarioPorDni(dni); // Asume que este método está en UsuarioService
+    if (usuario == null) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    // Obtener los alquileres asociados al usuario
+    List<Alquiler> alquileres = alquilerService.obtenerAlquileresPorCliente(usuario.getId());
+    return ResponseEntity.ok(alquileres);
+}
+
 
     @PutMapping("/actualizar-alquiler")
     public ResponseEntity<Map<String, String>> actualizarAlquiler(@RequestBody(required = false) Map<String, Object> data) {
