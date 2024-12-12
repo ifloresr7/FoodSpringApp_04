@@ -1,7 +1,6 @@
 package com.FoodSpringApp.FoodSpringApp.model;
 
 import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,9 +32,13 @@ public class Alquiler {
     @Column(name = "fecha_inicio", nullable = false)
     private Date fechaInicio;
 
-    @Column(name = "precio",nullable = false)
+    @Column(name = "precio", nullable = false)
     private double precio;
 
+    // Constructor sin parámetros
+    public Alquiler() {}
+
+    // Getters
     public int getId() {
         return id;
     }
@@ -58,6 +61,11 @@ public class Alquiler {
 
     public double getPrecio() {
         return precio;
+    }
+
+    // Setters
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setClienteId(int clienteId) {

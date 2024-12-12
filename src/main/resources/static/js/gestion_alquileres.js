@@ -47,42 +47,48 @@ const formCrearAlquiler = document.getElementById("formCrearAlquiler");
 
 formCrearAlquiler.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    const alquilerId = document.getElementById("alquilerId").value; // Obtén el ID del formulario
+    const alquilerId = document.getElementById("alquilerId").value;
     const alquilerData = {
-        id: alquilerId || null, // Asegúrate de enviar el ID solo si existe
+        id: alquilerId || null,
         clienteId: document.getElementById("clienteId").value,
         vehiculoId: document.getElementById("vehiculoId").value,
         fechaInicio: document.getElementById("fechaInicio").value,
         fechaFin: document.getElementById("fechaFin").value,
         precio: document.getElementById("precio").textContent.replace('€', '')
     };
-
-    const url = alquilerId 
-        ? '/api/alquileres/actualizar-alquiler' // Usar PUT si existe un ID
-        : '/api/alquileres/crear-alquiler';    // Usar POST si es nuevo
-
-    const method = alquilerId ? 'PUT' : 'POST'; // Método HTTP dinámico
-
-    try {
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(alquilerData)
-        });
-
-        if (response.ok) {
-            alert(alquilerId ? "Alquiler actualizado exitosamente" : "Alquiler creado exitosamente");
-            crearAlquilerDialog.close();
-            formCrearAlquiler.reset();
-            window.location.reload();
-        } else {
-            alert("Error al procesar el alquiler.");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Hubo un problema al comunicarse con el servidor.");
+    const url = alquilerId ? '/api/alquileres/actualizar-alquiler' : '/api/alquileres/crear-alquiler';
+    const method = alquilerId ? 'PUT' : 'POST';
+    const token_custom_foodspringapp = document.cookie.split('; ').find(row => row.startsWith('token_custom_foodspringapp='))?.split('=')[1];
+    if (!token_custom_foodspringapp) {
+        alert('No se encontró la cookie token_custom_foodspringapp. Por favor, asegúrate de estar autenticado.');
+        return;
     }
+    const tokenData = {
+        token: token_custom_foodspringapp
+    };
+    fetch(`${url}`, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alquilerData, tokenData })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                alert(`${errorData.message}`);
+                throw new Error(errorData.message);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        alert('Se a producido un error:', error);
+    })
+    .finally(() => {
+        window.location.reload();
+    });
 });
 
 

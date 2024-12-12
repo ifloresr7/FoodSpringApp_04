@@ -18,7 +18,6 @@ import com.FoodSpringApp.FoodSpringApp.model.Vehiculo;
 import com.FoodSpringApp.FoodSpringApp.service.AlquilerService;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
 import com.FoodSpringApp.FoodSpringApp.service.VehiculoService;
-import com.FoodSpringApp.FoodSpringApp.config.SessionManager;
 
 @Controller
 public class AppController {
@@ -30,7 +29,7 @@ public class AppController {
     @Autowired
     private AlquilerService alquilerService;
 
-    private String version = "2024.11.29.21.35";
+    private String version = "2024.12.11.22.21";
 
     @GetMapping("/")
     public String homePage(Model model) {

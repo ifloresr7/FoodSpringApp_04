@@ -18,22 +18,22 @@ import java.util.Map;
 
 @Component
 public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
-    private static final String ENCRYPTION_KEY = "3sG%#?3B.~+4RAy3ZsPXmR]I7io5j=)2*nE#4kZwG1,D9_0^E87NkR4y[Hhm6Yl,";
+    private static final String ENCRYPTION_KEY = "nXtYzWAQ35MvKL2gUpJRocbdEVGHFqP7aZTBxyWm49";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String sessionId = request.getSession().getId(); //BBDC5B530B49BA3DAFE220D6474AC7B8
+        String sessionId = request.getSession().getId();
         String encryptedSessionId = encrypt(sessionId); 
-        Cookie cookie = new Cookie("token_custom_foodspringapp", encryptedSessionId); //o9e67Wfyq4S21YtspFAuyLtaMA3jJqU7F07J55m86NqJv+j4vpDxUSIoroWt7d1M
+        Cookie cookie = new Cookie("token_custom_foodspringapp", encryptedSessionId);
         cookie.setPath("/");
         response.addCookie(cookie);
         response.sendRedirect("/"); 
     }
 
-    public static boolean isSessionIdValid(String token) { //o9e67Wfyq4S21YtspFAuyLtaMA3jJqU7F07J55m86NqJv+j4vpDxUSIoroWt7d1M
+    public static boolean isSessionIdValid(String token) {
         try {
-            String sessionId = decrypt(token); //BBDC5B530B49BA3DAFE220D6474AC7B8
-            Map<String, String> activeSessions = SessionManager.getAllSessions(); //[BBDC5B530B49BA3DAFE220D6474AC7B8,BBDC5B530B49BA3DAFE220D6474AC7B8,BBDC5B530B49BA3DAFE220D6474AC7B8]
+            String sessionId = decrypt(token);
+            Map<String, String> activeSessions = SessionManager.getAllSessions();
             return activeSessions.containsKey(sessionId);
         } catch (Exception e) {
             System.err.println("Error al descifrar el token: " + e.getMessage());

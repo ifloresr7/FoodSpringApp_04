@@ -153,7 +153,7 @@ function eliminarUsuario(id) {
     });
 
     function registrarUsuario() {
-        const formData = {
+        const usuarioData = {
             nombre: document.getElementById('Postnombre').value,
             apellidos: document.getElementById('Postapellidos').value,
             dni: document.getElementById('Postdni').value,
@@ -164,7 +164,7 @@ function eliminarUsuario(id) {
             password: document.getElementById('Postpassword').value,
             confirmPassword: document.getElementById('PostconfirmPassword').value
         };
-        if (formData.password !== formData.confirmPassword) {
+        if (usuarioData.password !== usuarioData.confirmPassword) {
             document.getElementById('error-message').style.display = 'block';
             document.getElementById('error-message').textContent = 'Las contraseñas no coinciden.';
             return;

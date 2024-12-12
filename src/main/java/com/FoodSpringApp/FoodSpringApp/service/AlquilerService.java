@@ -99,5 +99,10 @@ public class AlquilerService{
             .orElseThrow(() -> new RuntimeException("Alquiler no encontrado."));
         alquilerRepository.delete(alquiler);
     }
+
+    public void crearAlquiler(Alquiler alquiler) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'crearAlquiler'");
+    }
     
 }
