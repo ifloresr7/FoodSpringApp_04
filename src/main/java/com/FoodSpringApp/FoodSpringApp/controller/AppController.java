@@ -19,6 +19,8 @@ import com.FoodSpringApp.FoodSpringApp.service.AlquilerService;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
 import com.FoodSpringApp.FoodSpringApp.service.VehiculoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @Controller
 public class AppController {
 
@@ -30,7 +32,11 @@ public class AppController {
     private AlquilerService alquilerService;
 
     private String version = "2024.12.11.22.21";
-
+    /**
+     * 
+     * @param model {@link / } es la página inicio
+     * @return Repuesta Http home
+     */
     @GetMapping("/")
     public String homePage(Model model) {
         model.addAttribute("version", this.version);
@@ -40,7 +46,10 @@ public class AppController {
         model.addAttribute("role", obtenerRoleDeUsuario());
         return "home";
     }
-
+    /**
+     * @param model Objeto {@link Vehiculo} con la información del listado vehiculos.
+     * @return Respuesta HTTP indicando el éxito o fallo del registro.
+     */
     @GetMapping("/vehiculos")
     public String vehiculosPage(Model model) {
         model.addAttribute("version", this.version);
@@ -71,6 +80,7 @@ public class AppController {
         return "mi_perfil";
     }
 
+    @Operation(summary = "Obtener vehiculos", description = "Este método devuelve vehiculos.")
     @GetMapping("/mis-alquileres")
     public String misAlquileresPage(Model model) {
         String dni = null;
