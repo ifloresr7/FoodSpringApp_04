@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,15 +19,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.FoodSpringApp.FoodSpringApp.Component.CustomAuthSuccessHandler;
 import com.FoodSpringApp.FoodSpringApp.model.Alquiler;
 import com.FoodSpringApp.FoodSpringApp.model.Usuario;
-//import com.FoodSpringApp.FoodSpringApp.repository.VehiculoRepository;
 import com.FoodSpringApp.FoodSpringApp.service.AlquilerService;
 import com.FoodSpringApp.FoodSpringApp.service.UsuarioService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+ 
+//import io.swagger.v3.oas.annotations.parameters.Parameter;
 
 @Controller
 @RequestMapping("/api/alquileres")
@@ -40,7 +43,12 @@ public class AlquilerController {
 
     @Autowired
     private UsuarioService usuarioService;
-
+ 
+    @Operation(summary = "Obtener todos los alquileres", description = "Obtiene una lista de todos los alquileres registrados")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Alquileres obtenidos correctamente"),
+        @ApiResponse(responseCode = "500", description = "Error al obtener los alquileres")
+    })
     @GetMapping("/obtener-alquileres")
     public ResponseEntity<?> obtenerTodosAlquileress() {
         try {
@@ -55,6 +63,11 @@ public class AlquilerController {
         }
     }
 
+    @Operation(summary = "Crear alquileres", description = "Crear Alquiler")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Alquileres obtenidos correctamente"),
+        @ApiResponse(responseCode = "500", description = "Error al crear los alquileres")
+    })
     @PostMapping("/crear-alquiler")
     public ResponseEntity<Map<String, String>> crearAlquiler(@RequestBody Map<String, Object> data) {
         try {
@@ -85,6 +98,11 @@ public class AlquilerController {
         }
     }
 
+@Operation(summary = "Obtener todos mis alquileres", description = "Obtiene una lista de todos mis alquileres")
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Mis Alquileres obtenidos correctamente"),
+    @ApiResponse(responseCode = "500", description = "Error al obtener mis alquileres")
+})
 @GetMapping("/mis-alquileres")
 public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario(@RequestParam(value = "dni", required = false) String dni) {
     
@@ -104,7 +122,11 @@ public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario(@RequestParam(
     return ResponseEntity.ok(alquileres);
 }
 
-
+@Operation(summary = "Actualizar alquileres", description = "Actualizar alquileres")
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Mis Alquileres obtenidos correctamente"),
+    @ApiResponse(responseCode = "500", description = "Error al obtener mis alquileres")
+})
     @PutMapping("/actualizar-alquiler")
     public ResponseEntity<Map<String, String>> actualizarAlquiler(@RequestBody(required = false) Map<String, Object> data) {
         Map<String, String> response = new HashMap<>();
@@ -171,6 +193,11 @@ public ResponseEntity<List<Alquiler>> obtenerAlquileresDelUsuario(@RequestParam(
         }
     }    
 
+    @Operation(summary = "Borrar Alquiler", description = "Borrar alquiler")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Borrar alquiler"),
+        @ApiResponse(responseCode = "500", description = "Error al obtener mis alquileres")
+    })
     @DeleteMapping("/eliminar-alquiler/{id}")
     public ResponseEntity<Map<String, String>> eliminarAlquiler(@PathVariable int id) {
         try {
